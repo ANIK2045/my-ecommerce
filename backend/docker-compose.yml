@@ -1,0 +1,197 @@
+x-common-env: &common-env
+  SPRING_PROFILES_ACTIVE: dev
+  EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://service-discovery:8761/eureka/
+  SPRING_CONFIG_IMPORT: optional:configserver:http://cloud-config:9296
+  MANAGEMENT_ZIPKIN_TRACING_ENDPOINT: http://zipkin:9411/api/v2/spans
+
+services:
+  zipkin:
+    image: openzipkin/zipkin
+    container_name: zipkin
+    networks:
+      - app-network
+    ports:
+      - "9411:9411"
+
+  # 1. Config Server: Must start first to provide properties
+  cloud-config:
+    build:
+      context: .
+      dockerfile: cloud-config/Dockerfile
+    networks:
+      - app-network
+    ports:
+      - "9296:9296"
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+      - MANAGEMENT_ZIPKIN_TRACING_ENDPOINT=http://zipkin:9411/api/v2/spans
+    depends_on:
+      - zipkin
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9296/actuator/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # 2. Service Discovery: Registration hub
+  service-discovery:
+    build:
+      context: .
+      dockerfile: service-discovery/Dockerfile
+    networks:
+      - app-network
+    ports:
+      - "8761:8761"
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+      - MANAGEMENT_ZIPKIN_TRACING_ENDPOINT=http://zipkin:9411/api/v2/spans
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8761/eureka/apps" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    depends_on:
+      cloud-config:
+        condition: service_healthy
+
+  proxy-client:
+    build:
+      context: .
+      dockerfile: proxy-client/Dockerfile
+    networks:
+      - app-network
+    ports:
+      - "8900:8900"
+    environment:
+      <<: *common-env
+      EUREKA_INSTANCE_HOSTNAME: proxy-client
+    depends_on:
+      service-discovery:
+        condition: service_healthy
+      cloud-config:
+        condition: service_healthy
+
+  # Business Services (Example Grouping)
+  user-service:
+    build:
+      context: .
+      dockerfile: user-service/Dockerfile
+    networks:
+      - app-network
+    ports:
+      - "8700:8700"
+    environment:
+      <<: *common-env
+      EUREKA_INSTANCE_HOSTNAME: user-service
+    depends_on:
+      service-discovery:
+        condition: service_healthy
+      cloud-config:
+        condition: service_healthy
+
+  product-service:
+    build:
+      context: .
+      dockerfile: product-service/Dockerfile
+    networks:
+      - app-network
+    ports:
+      - "8500:8500"
+    environment:
+      <<: *common-env
+      EUREKA_INSTANCE_HOSTNAME: product-service
+    depends_on:
+      service-discovery:
+        condition: service_healthy
+      cloud-config:
+        condition: service_healthy
+
+  order-service:
+    build:
+      context: .
+      dockerfile: order-service/Dockerfile
+    networks:
+      - app-network
+    ports:
+      - "8300:8300"
+    environment:
+      <<: *common-env
+      EUREKA_INSTANCE_HOSTNAME: order-service
+    depends_on:
+      service-discovery:
+        condition: service_healthy
+      cloud-config:
+        condition: service_healthy
+
+  payment-service:
+    build:
+      context: .
+      dockerfile: payment-service/Dockerfile
+    networks:
+      - app-network
+    ports:
+      - "8400:8400"
+    environment:
+      <<: *common-env
+      EUREKA_INSTANCE_HOSTNAME: payment-service
+    depends_on:
+      service-discovery:
+        condition: service_healthy
+      cloud-config:
+        condition: service_healthy
+
+  shipping-service:
+    build:
+      context: .
+      dockerfile: shipping-service/Dockerfile
+    networks:
+      - app-network
+    ports:
+      - "8600:8600"
+    environment:
+      <<: *common-env
+      EUREKA_INSTANCE_HOSTNAME: shipping-service
+    depends_on:
+      service-discovery:
+        condition: service_healthy
+      cloud-config:
+        condition: service_healthy
+
+  favourite-service:
+    build:
+      context: .
+      dockerfile: favourite-service/Dockerfile
+    networks:
+      - app-network
+    ports:
+      - "8800:8800"
+    environment:
+      <<: *common-env
+      EUREKA_INSTANCE_HOSTNAME: favourite-service
+    depends_on:
+      service-discovery:
+        condition: service_healthy
+      cloud-config:
+        condition: service_healthy
+
+  # 3. API Gateway: Public entry point
+  api-gateway:
+    build:
+      context: .
+      dockerfile: api-gateway/Dockerfile
+    networks:
+      - app-network
+    ports:
+      - "8080:8080"
+    environment:
+      <<: *common-env
+      EUREKA_INSTANCE_HOSTNAME: api-gateway
+    depends_on:
+      service-discovery:
+        condition: service_healthy
+      cloud-config:
+        condition: service_healthy
+
+networks:
+  app-network:
+    driver: bridge

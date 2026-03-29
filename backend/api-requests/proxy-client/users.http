@@ -1,0 +1,5 @@
+### GET request to users
+GET http://localhost:8080/app/api/users
+Authorization: Bearer {{token}}
+
+###

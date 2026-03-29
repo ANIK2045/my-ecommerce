@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.38.0 (a8f5d1cbd)
+  labels:
+    io.kompose.service: service-discovery
+  name: service-discovery
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: service-discovery
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert
+        kompose.version: 1.38.0 (a8f5d1cbd)
+      labels:
+        io.kompose.service: service-discovery
+    spec:
+      containers:
+        - env:
+            - name: MANAGEMENT_ZIPKIN_TRACING_ENDPOINT
+              value: http://zipkin:9411/api/v2/spans
+            - name: SPRING_PROFILES_ACTIVE
+              value: dev
+          image: markcus0526/mark-ecommerce-spring-boot-service-discovery:latest  # Ensure this matches your local image name
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            httpGet:
+              path: /eureka/apps
+              port: 8761
+            initialDelaySeconds: 60
+            failureThreshold: 5
+            periodSeconds: 10
+            timeoutSeconds: 5
+          name: service-discovery
+          ports:
+            - containerPort: 8761
+              protocol: TCP
+          resources:
+            limits:
+              memory: "2Gi"   # 2048Mi
+              cpu: "1000m"    # 1 Full Core
+            requests:
+              memory: "1Gi"   # 1024Mi
+              cpu: "500m"
+      restartPolicy: Always

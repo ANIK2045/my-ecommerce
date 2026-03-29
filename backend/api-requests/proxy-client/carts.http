@@ -1,0 +1,5 @@
+### GET request to carts
+GET http://localhost:8080/app/api/carts
+Content-Type: application/json
+
+###
