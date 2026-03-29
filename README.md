@@ -5,9 +5,9 @@ Modern e-commerce platform built with Spring Cloud microservices architecture.
 ![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.3.3-brightgreen)
 ![Java](https://img.shields.io/badge/Java-17%2B-blue)
 ![Spring Cloud](https://img.shields.io/badge/Spring%20Cloud-2023.0.3-green)
-![License](https://img.shields.io/badge/License-MIT-yellow)
 
-## ???? Table of Contents
+
+## Table of Contents
 
 - [Architecture](#architecture)
 - [Tech Stack](#tech-stack)
@@ -19,7 +19,7 @@ Modern e-commerce platform built with Spring Cloud microservices architecture.
 - [Project Structure](#project-structure)
 - [License](#license)
 
-## ??????? Architecture
+## Architecture
 
 This project follows a **microservices architecture** pattern with the following components:
 
@@ -77,7 +77,7 @@ This project follows a **microservices architecture** pattern with the following
 - **Containerization**: Docker, Docker Compose
 - **Orchestration**: Kubernetes
 
-## ???? Services
+## Services
 
 ### Infrastructure Services
 
@@ -131,7 +131,7 @@ This project follows a **microservices architecture** pattern with the following
     - Client proxy service
     - Inter-service communication
 
-## ???? Getting Started
+## Getting Started
 
 ### Prerequisites
 
@@ -239,7 +239,7 @@ The following services are configured for Kubernetes deployment:
 - `proxy-client/`
 - `zipkin/`
 
-## ???? API Documentation
+## API Documentation
 
 Each service provides OpenAPI/Swagger documentation:
 
@@ -252,24 +252,24 @@ Each service provides OpenAPI/Swagger documentation:
 
 ```
 my-ecommerce/
-????????? api-gateway/              # API Gateway service
-????????? cloud-config/             # Cloud Config Server
-????????? service-discovery/        # Eureka Service Registry
-????????? user-service/             # User management
-????????? product-service/          # Product catalog
-????????? order-service/           # Order processing
-????????? payment-service/          # Payment processing
-????????? shipping-service/         # Shipping management
-????????? favourite-service/        # Customer favorites
-????????? proxy-client/            # Client proxy
-????????? api-requests/           # HTTP client requests
-????????? k8s/                    # Kubernetes manifests
-????????? docker-compose.yml        # Docker Compose configuration
-????????? pom.xml                  # Parent POM
-????????? README.md                # This file
+api-gateway/              # API Gateway service
+cloud-config/             # Cloud Config Server
+service-discovery/        # Eureka Service Registry
+user-service/             # User management
+product-service/          # Product catalog
+order-service/           # Order processing
+payment-service/          # Payment processing
+shipping-service/         # Shipping management
+favourite-service/        # Customer favorites
+proxy-client/            # Client proxy
+api-requests/           # HTTP client requests
+k8s/                    # Kubernetes manifests
+docker-compose.yml        # Docker Compose configuration
+pom.xml                  # Parent POM
+README.md                # This file
 ```
 
-## ???? Configuration
+##Configuration
 
 ### Environment Variables
 
@@ -286,7 +286,7 @@ MANAGEMENT_ZIPKIN_TRACING_ENDPOINT=http://zipkin:9411/api/v2/spans
 
 Each service can be configured via properties files in `src/main/resources/application.yml`.
 
-## ???? Testing
+## Testing
 
 Run tests using Maven:
 
@@ -298,15 +298,11 @@ Run tests using Maven:
 ./mvnw test jacoco:report
 ```
 
-## ???? License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## ???? Contributing
+##Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
 
 ---
 
-Built with ?????? using Spring Cloud Microservices
+Built with using Spring Cloud Microservices
 
