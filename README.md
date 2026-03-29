@@ -1,4 +1,4 @@
-# Mark E-Commerce Spring Boot
+﻿# Anmol E-Commerce Spring Boot
 
 Modern e-commerce platform built with Spring Cloud microservices architecture.
 
@@ -251,7 +251,7 @@ Each service provides OpenAPI/Swagger documentation:
 ## ???? Project Structure
 
 ```
-mark-ecommerce-spring-boot/
+my-ecommerce/
 ????????? api-gateway/              # API Gateway service
 ????????? cloud-config/             # Cloud Config Server
 ????????? service-discovery/        # Eureka Service Registry
