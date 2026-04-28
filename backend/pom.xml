@@ -12,8 +12,8 @@
 		<relativePath />
 	</parent>
 
-	<groupId>com.markcus</groupId>
-	<artifactId>mark-ecommerce-spring-boot</artifactId>
+	<groupId>com.anmol</groupId>
+	<artifactId>anmol-ecommerce-spring-boot</artifactId>
 	<version>0.1.0</version>
 	<name>mark-ecommerce-spring-boot</name>
 	<description>Modern ecommerce platform built with Spring Cloud microservices architecture</description>
